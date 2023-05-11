@@ -4,11 +4,11 @@ on:
   workflow_dispatch
 
 jobs:
-  deploy_and_test:
+  deploy_vpc:
     name: "Deploy the VPC"
     runs-on: ubuntu-22.04
     defaults:
-      run:
+      run: 
         working-directory: bastion-to-rds
     steps:
       - name: Checkout
@@ -25,22 +25,14 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      - name: VPC Init
-        run: terraform init 
+      - name: Terraform Init
+        id: init
+        run: terraform init
 
-      - name: VPC Apply
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
+
+      - name: Terraform Apply
+        id: apply 
         run: terraform apply -auto-approve -input=false
-
-      - name: Bastion Init 
-        run: terraform init 
-
-      - name: Bastion Apply 
-        run: terraform apply -auto-approve -input=false
-
-      - name: Get RDS Endpoint
-        run: terraform outputs # rds endpoint
-
-      - name: Get Bastion DNS Address 
-        run: terraform outputs # bastion 
-
-      - name: 
