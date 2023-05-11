@@ -1,0 +1,39 @@
+name: "Bastion Key Pair RDS Tunnel"
+
+on:
+  workflow_dispatch
+
+jobs:
+  deploy_vpc:
+    name: "Deploy the VPC"
+    runs-on: ubuntu-22.04
+    defaults:
+      run: 
+        working-directory: bastion-to-rds
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2 
+        with:
+          role-to-assume: arn:aws:iam::919980474747:role/github-actions
+          aws-region: us-west-2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
+
+      - name: Terraform Apply
+        id: apply 
+        run: terraform apply -auto-approve -input=false
+
