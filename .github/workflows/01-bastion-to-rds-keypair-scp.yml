@@ -10,6 +10,9 @@ jobs:
     defaults:
       run: 
         working-directory: bastion-to-rds
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v3
