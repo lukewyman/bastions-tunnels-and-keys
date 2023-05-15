@@ -55,6 +55,7 @@ resource "aws_security_group" "bastion_sg" {
 resource "aws_db_instance" "db_instance" {
 
   allocated_storage      = 10
+  db_name                = "books"
   db_subnet_group_name   = aws_db_subnet_group.db_subnet_group.name
   engine                 = "postgres"
   engine_version         = "14.6"
