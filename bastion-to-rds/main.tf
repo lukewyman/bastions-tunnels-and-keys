@@ -8,6 +8,7 @@ resource "aws_instance" "bastion" {
   subnet_id                   = data.terraform_remote_state.vpc.outputs.public_subnets_ids[0]
   vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
   key_name                    = aws_key_pair.key_pair.key_name
+  user_data                   = data.template_cloudinit_config.config.rendered
 
   tags = {
     "Name" = "${terraform.workspace}-bastion"
@@ -55,7 +56,7 @@ resource "aws_security_group" "bastion_sg" {
 resource "aws_db_instance" "db_instance" {
 
   allocated_storage      = 10
-  db_name                = "books"
+  db_name                = "books_db"
   db_subnet_group_name   = aws_db_subnet_group.db_subnet_group.name
   engine                 = "postgres"
   engine_version         = "14.6"

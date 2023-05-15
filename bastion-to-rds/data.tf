@@ -23,6 +23,22 @@ data "aws_iam_policy_document" "assume_role_policy" {
   }
 }
 
+data "template_cloudinit_config" "config" {
+  gzip          = false
+  base64_encode = true
+
+  part {
+    content_type = "text/x-shellscript"
+    content      = <<-EOT
+    #!/bin/bash
+
+    sudo apt-get update -y
+    sudo apt-get install -y postgresql-client
+
+    EOT
+  }
+}
+
 data "terraform_remote_state" "vpc" {
   backend = "remote"
 
