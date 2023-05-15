@@ -50,13 +50,13 @@ jobs:
 
       - name: Get DB Username
         id: get_db_username
-        uses: IP-Sentinel/actions-aws-ssm-params-to-env@v1.2
+        uses: IP-Sentinel/actions-aws-ssm-params-to-env@v1.4.0
         with:
           ssm-path: /app/bastions/POSTGRES_USER_NAME
 
       - name: Get DB Password
         id: get_db_password
-        uses: IP-Sentinel/actions-aws-ssm-params-to-env@v1.2
+        uses: IP-Sentinel/actions-aws-ssm-params-to-env@v1.4.0
         with:
           ssm-path: /app/bastions/POSTGRES_PASSWORD
           decryption: true 
@@ -65,11 +65,10 @@ jobs:
       - name: Seed the Database
         uses: cross-the-world/ssh-scp-ssh-pipelines@v1.1.4
         env: 
-          BASTION_HOST: steps.tf-outputs.outputs.bastion_host
           DB_ADDRESS: steps.tf-outputs.outputs.db_address
           DB_PORT: steps.tf-outputs.outputs.db_port
         with:
-          host: $BASTION_HOST
+          host: steps.tf-outputs.outputs.bastion_host
           user: ubuntu
           port: 22
           key: ${{ secrets.BASTION_SSH_KEY }}
