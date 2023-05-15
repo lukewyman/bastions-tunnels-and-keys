@@ -44,9 +44,9 @@ jobs:
         id: tf_outputs
         run: |
           terraform-bin output -json > tf-outputs.json
-          echo "bastion_host=$(jq '.bastion_host' tf-outputs.json)" >> "$GITHUB_OUTPUT"
-          echo "db_address=$(jq '.db_address' tf-outputs.json)" >> "$GITHUB_OUTPUT"
-          echo "db_port=$(jq '.db_port' tf-outputs.json)" >> "$GITHUB_OUTPUT"
+          echo "bastion_host=$(jq '.bastion_host.value' tf-outputs.json)" >> "$GITHUB_OUTPUT"
+          echo "db_address=$(jq '.db_address.value' tf-outputs.json)" >> "$GITHUB_OUTPUT"
+          echo "db_port=$(jq '.db_port.value' tf-outputs.json)" >> "$GITHUB_OUTPUT"
 
       - name: Get DB Username
         id: get_db_username
