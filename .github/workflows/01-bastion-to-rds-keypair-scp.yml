@@ -45,6 +45,7 @@ jobs:
         run: |
           terraform-bin output -json > tf-outputs.json
           echo "bastion_host=$(jq '.bastion_host.value' tf-outputs.json)" >> "$GITHUB_OUTPUT"
+          echo "bastion_public_ip=$(jq '.bastion_public_ip.value' tf-outputs.json)" >> "$GITHUB_OUTPUT"
           echo "db_address=$(jq '.db_address.value' tf-outputs.json)" >> "$GITHUB_OUTPUT"
           echo "db_port=$(jq '.db_port.value' tf-outputs.json)" >> "$GITHUB_OUTPUT"
 
@@ -68,7 +69,7 @@ jobs:
           DB_ADDRESS: steps.tf-outputs.outputs.db_address
           DB_PORT: steps.tf-outputs.outputs.db_port
         with:
-          host: steps.tf-outputs.outputs.bastion_host
+          host: steps.tf-outputs.outputs.bastion_public_ip
           user: ubuntu
           port: 22
           key: ${{ secrets.BASTION_SSH_KEY }}
