@@ -42,21 +42,23 @@ jobs:
 
       - name: Get Terraform Outputs
         id: tf_outputs
-        uses: dflook/terraform-output@v1.29.1
-        with:
-          workspace: bastion-keypair-rds
+        run: |
+          terraform-bin output -json > tf-outputs.json
+          echo "bastion_host=$(jq '.bastion_host' tf-outputs.json)" >> "$GITHUB_OUTPUT"
+          echo "db_address=$(jq '.db_address' tf-outputs.json)" >> "$GITHUB_OUTPUT"
+          echo "db_port=$(jq '.db_port' tf-outputs.json)" >> "$GITHUB_OUTPUT"
 
       - name: Get DB Username
         id: get_db_username
         uses: IP-Sentinel/actions-aws-ssm-params-to-env@v1.2
         with:
-          ssm-path: /app/bastion/POSTGRES_USER_NAME
+          ssm-path: /app/bastions/POSTGRES_USER_NAME
 
       - name: Get DB Password
         id: get_db_password
         uses: IP-Sentinel/actions-aws-ssm-params-to-env@v1.2
         with:
-          ssm-path: /app/bastion/POSTGRES_PASSWORD
+          ssm-path: /app/bastions/POSTGRES_PASSWORD
           decryption: true 
           mask-values: true
 
