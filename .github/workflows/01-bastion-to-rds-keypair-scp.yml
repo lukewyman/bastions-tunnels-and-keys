@@ -48,6 +48,8 @@ jobs:
           echo "bastion_public_ip=$(jq '.bastion_public_ip.value' tf-outputs.json)" >> "$GITHUB_OUTPUT"
           echo "db_address=$(jq '.db_address.value' tf-outputs.json)" >> "$GITHUB_OUTPUT"
           echo "db_port=$(jq '.db_port.value' tf-outputs.json)" >> "$GITHUB_OUTPUT"
+          echo bastion host: $(jq '.bastion_host.value' tf-outputs.json)
+          echo bastion public ip: $(jq '.bastion_public_ip.value' tf-outputs.json)
 
       - name: Get DB Username
         id: get_db_username
