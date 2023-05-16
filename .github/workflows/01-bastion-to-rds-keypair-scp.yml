@@ -70,6 +70,9 @@ jobs:
           name: ec2_bastion
           known_hosts: ${{ steps.tf_outputs.outputs.bastion_public_ip }}
 
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ steps.tf_outputs.outputs.bastion_public_ip }}  >> ~/.ssh/known_hosts
+
       - name: Setup up data directory on bastion
         uses: appleboy/ssh-action@v0.1.10
         with:
