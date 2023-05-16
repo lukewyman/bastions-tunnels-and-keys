@@ -69,6 +69,7 @@ jobs:
           host: steps.tf-outputs.outputs.bastion_host
           username: ubuntu
           port: 22 
+          key: ${{ secrets.BASTION_SSH_KEY }}
           script: |
             rm -rf /home/user/test_data
             mkdir /home/user/test_data
