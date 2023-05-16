@@ -4,7 +4,7 @@ on:
   workflow_dispatch
 
 jobs:
-  deploy_vpc:
+  deploy_and_seed_db:
     name: "Deploy the VPC"
     runs-on: ubuntu-22.04
     defaults:
@@ -44,12 +44,10 @@ jobs:
         id: tf_outputs
         run: |
           terraform-bin output -json > tf-outputs.json
-          echo "bastion_host=$(jq '.bastion_host.value' tf-outputs.json)" >> "$GITHUB_OUTPUT"
+          echo "bastion_public_dns=$(jq '.bastion_public_dns.value' tf-outputs.json)" >> "$GITHUB_OUTPUT"
           echo "bastion_public_ip=$(jq '.bastion_public_ip.value' tf-outputs.json)" >> "$GITHUB_OUTPUT"
           echo "db_address=$(jq '.db_address.value' tf-outputs.json)" >> "$GITHUB_OUTPUT"
           echo "db_port=$(jq '.db_port.value' tf-outputs.json)" >> "$GITHUB_OUTPUT"
-          echo bastion host: $(jq '.bastion_host.value' tf-outputs.json)
-          echo bastion public ip: $(jq '.bastion_public_ip.value' tf-outputs.json)
 
       - name: Get DB Username
         id: get_db_username
@@ -68,7 +66,7 @@ jobs:
       - name: Setup up data directory on bastion
         uses: appleboy/ssh-action@v0.1.10
         with:
-          host: steps.tf-outputs.outputs.bastion_public_ip
+          host: ${{ steps.tf-outputs.outputs.bastion_public_dns }}
           username: ubuntu
           port: 22 
           key: ${{ secrets.BASTION_SSH_KEY }}
