@@ -68,7 +68,7 @@ jobs:
       - name: Setup up data directory on bastion
         uses: appleboy/ssh-action@v0.1.10
         with:
-          host: steps.tf-outputs.outputs.bastion_host
+          host: steps.tf-outputs.outputs.bastion_public_ip
           username: ubuntu
           port: 22 
           key: ${{ secrets.BASTION_SSH_KEY }}
