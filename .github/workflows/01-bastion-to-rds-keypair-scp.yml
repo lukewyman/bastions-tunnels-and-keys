@@ -63,6 +63,9 @@ jobs:
           decryption: true 
           mask-values: true
 
+      - name: Add Bastion to Known Hosts
+        run: ssh-keyscan -H ${{ steps.tf_outputs.outputs.bastion_public_ip }} >> ~/.ssh/known_hosts
+
       - name: Setup up data directory on bastion
         uses: appleboy/ssh-action@v0.1.10
         with:
